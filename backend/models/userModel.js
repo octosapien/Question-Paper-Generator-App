@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // Add more user-related properties as needed
+ 
 });
 
 const UserModel = mongoose.model('User', userSchema);
