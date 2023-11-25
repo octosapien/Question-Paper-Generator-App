@@ -15,7 +15,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
- 
+  savedQuizzes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Quiz', 
+  }],
 });
 
 const UserModel = mongoose.model('User', userSchema);

@@ -6,12 +6,15 @@ const questionSchema = new mongoose.Schema({
     required: true,
   },
   tags: {
-    type: [String],
+    type: [{
+      type: String,
+      enum: ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5'],
+    }],
     default: [],
   },
   category: {
     type: String,
-    required: true,
+    // required: true,
   },
   difficulty: {
     type: String,
@@ -22,6 +25,11 @@ const questionSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  alternatives:  {
+    type: [String], 
+    default: [],
+  }
+
   
 });
 
