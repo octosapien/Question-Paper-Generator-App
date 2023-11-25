@@ -1,6 +1,7 @@
 
  import { useState } from 'react';
 import Paper from './Paper';
+import './NewPaperForm.css'
 
 function NewPaperForm() {
 
@@ -9,11 +10,11 @@ function NewPaperForm() {
  const [variationValues, setVariationValues] = useState({});
  const [basisVariations, setBasisVariations] = useState([]);
  const [receivedQuestions, setReceivedQuestions] = useState(null);
+ const [displayDetails, setDisplaydetails]=useState({});
 
  const handleTotalChange = (e) => {
     setTotal(parseInt(e.target.value));
  };
-
 
  const handleBasisChange = (e) => {
     const selectedBasis = e.target.value;
@@ -43,6 +44,39 @@ function NewPaperForm() {
     setVariationValues({ ...variationValues, [variation]: parseInt(value) });
  };
 
+ const handleSaveToLocalStorage = () => {
+  const savedQuizzes = JSON.parse(localStorage.getItem('savedQuizzes')) || [];
+  savedQuizzes.push({ data: receivedQuestions });
+  localStorage.setItem('savedQuizzes', JSON.stringify(savedQuizzes));
+  alert('Quiz saved to local storage!');
+};
+
+const handleDisplayInNewTab = () => {
+  const savedQuizzes = JSON.parse(localStorage.getItem('savedQuizzes')) || [];
+  if (savedQuizzes.length > 0) {
+    const retrievedQuestions = savedQuizzes[0].data;
+    const jsonContent = JSON.stringify(retrievedQuestions, null, 2);
+    const blob = new Blob([jsonContent], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    URL.revokeObjectURL(url);
+  } else {
+    alert('No quizzes found in local storage.');
+  }
+};
+
+const handleRetrieveFromLocalStorage = () => {
+  const savedQuizzes = JSON.parse(localStorage.getItem('savedQuizzes')) || [];
+  if (savedQuizzes.length > 0) {
+    const retrievedQuestions = savedQuizzes[0].data;
+    setReceivedQuestions(retrievedQuestions);
+    alert('Quiz retrieved from local storage!');
+  } else {
+    alert('No quizzes found in local storage.');
+  }
+};
+
+
  const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -58,6 +92,7 @@ function NewPaperForm() {
       distribution: variationValues,
     };
     console.log(formData);
+    setDisplaydetails({total:total,basis:basis,distribution:variationValues});
     try {
       const response = await fetch('http://localhost:3000/api/quiz/new', {
         method: 'POST',
@@ -78,35 +113,41 @@ function NewPaperForm() {
       console.error('Error fetching new quiz:', error); // Handle errors during the request
     }
 
+   
     setTotal(0);
     setBasis('');
     setVariationValues({});
     setBasisVariations([]);
+    console.log(displayDetails,"HELLO");
     // setReceivedQuestions(null);
  };
 
 
  const renderVariationFields = () => {
     return basisVariations.map((variation) => (
-      <label key={variation}>
-        {variation}:
+      <div>
+        <label key={variation}>
+        {variation}&nbsp;%&nbsp;:
         <input
           type="number"
           value={variationValues[variation] || ''}
           onChange={(e) => handleVariationChange(variation, e.target.value)}
         />
       </label>
+      </div>
+      
     ));
  };
 
  return (
+  <div >
     <form onSubmit={handleSubmit}>
-      <label>
-        Total Marks:
+      <label >
+        Total Marks :
         <input type="number" value={total} onChange={handleTotalChange} />
       </label>
       <label>
-        Basis:
+        Basis :
         <select value={basis} onChange={handleBasisChange}>
           <option value="">Select Basis</option>
           <option value="difficulty">Difficulty</option>
@@ -116,8 +157,18 @@ function NewPaperForm() {
       </label>
       {renderVariationFields()}
       <button type="submit">Generate Question Paper</button>
-      {receivedQuestions && <Paper  questions={receivedQuestions} />}
+      <span><b>Note</b> : You can select the basis of weightage distribution from the dropdown . (Tags aka Subject/Topic)</span>
     </form>
+    <div>
+      {receivedQuestions && <button type="button" onClick={handleSaveToLocalStorage}>
+          Save this Quiz
+      </button>}
+      <button type="button" onClick={handleDisplayInNewTab}>
+        Retrieve Saved Quizzes
+      </button>
+    </div>
+    {receivedQuestions && <Paper questions={receivedQuestions} displayDetails={displayDetails} />}
+    </div>
  );
 }
 
