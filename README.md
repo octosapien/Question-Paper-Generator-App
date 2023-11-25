@@ -24,3 +24,7 @@ Follow these steps to set up and run the application locally:
    - Execute `npm run dev` to start the frontend.
 
   Visit the pertinent address as directed by Vite to view and use the app.
+
+  ### Snapshots of the working app:
+![image](https://github.com/octosapien/Question-Paper-Generator-App/assets/114580332/4a866103-2735-4355-b273-ed9d591bfb2a)
+
