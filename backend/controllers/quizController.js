@@ -1,16 +1,6 @@
-const { generatePaper } = require('../../single_subsets_FIsherYatesShuffling');
+const { generatePaper } = require('../../single_subset_kanpsack_FisherYatesShuffling');
 const QuestionModel = require('../models/questionModel');
-// const generateQuiz = async (req, res) => {
-//   try {
-//     const formData = req.body; 
-//     const newQuiz = generatePaper(formData);
 
-//     res.json(newQuiz);
-//   } catch (error) {
-//     console.error('Error generating quiz:', error);
-//     res.status(500).json({ message: 'Error generating quiz' });
-//   }
-// };  
 
 const createNewQuiz = async (req, res) => {
   // console.dir(req);
