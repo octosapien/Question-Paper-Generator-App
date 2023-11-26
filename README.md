@@ -1,6 +1,6 @@
 # Question Paper Generator App
 
-The Question Paper Generator is a versatile application designed to create comprehensive and diverse sets of questions based on specific criteria, including difficulty levels, categories, and associated tags.
+The application is a question paper generator designed to create balanced and diverse sets of questions based on specified criteria and User-requested preferences, such as difficulty levels, categories, and tags and associated weightages .
 
 ## Setup and Local Deployment
 
